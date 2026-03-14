@@ -163,7 +163,7 @@
           ${mensaje}
           <button class="btn-close" data-bs-dismiss="alert"></button>
         </div>`;
-            setTimeout(() => { alerta.innerHTML = ''; }, 4000);
+            setTimeout(() => { alerta2.innerHTML = ''; }, 4000);
         }
 
 
@@ -178,10 +178,13 @@
                 }
             }
 
-            if (valores.estado === 'No Stock' && valores.cantidad !== '0') {
-                return mostrarAlerta("Si pone el estado No Stock, la cantidad debe ser 0", "danger");
+            if ((valores.cantidad == '0' && valores.estado == 'Activo') || (valores.estado !== 'Activo' && valores.cantidad !== '0')) {
+                return mostrarAlerta("Si la cantidad es 0 se debe poner el estado en No stock o descontinuado. O al revés", "danger");
             }
-
+            if(valores.cantidad < 0){
+                return mostrarAlerta("La cantidad no puede ser negativa", "danger");
+            }
+            
             const indice = document.getElementById("indiceEditar").value;
 
             if (indice === '') storage.push(valores);
@@ -199,7 +202,7 @@
             contenedor.innerHTML = storage.length === 0 ? `<p class="text-center text-muted">No hay citas registradas</p>` : '';
 
             storage.forEach((p, i) => {
-                const badgeColor = p.estado === 'Activo' ? 'bg-success' : (p.estado === 'NoStock' ? 'bg-danger' : 'bg-secondary');
+                const badgeColor = p.estado === 'Activo' ? 'bg-success' : (p.estado === 'No Stock' ? 'bg-danger' : 'bg-secondary');
                 const numId = (i + 1).toString().padStart(2, '0');
                 if (p.estado == 'Descontinuado') {
                     contenedor.innerHTML += `
